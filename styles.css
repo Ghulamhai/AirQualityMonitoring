@@ -1,0 +1,576 @@
+/* Variables */
+
+:root {
+  /* AQI Status Colors */
+  --good-color: #00e400;
+  --moderate-color: #ffff00;
+  --unhealthy-sg-color: #ff7e00;
+  --unhealthy-color: #ff0000;
+  --very-unhealthy-color: #8f3f97;
+  --hazardous-color: #7e0023;
+  /* Sensor Colors */
+  --temp-color: #ff704d;
+  --hum-color: #3db0ff;
+  --co2-color: #ff4dca;
+  --co-color: #ffaa00;
+  --pm25-color: #a073ff;
+  --pm10-color: #5271ff;
+  --pm1-color: #7986cb;
+  --ch4-color: #4caf50;
+  /* General Colors */
+  --body-bg: #f5f7ff;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --accent-color: #6366f1;
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --border-radius: 12px;
+}
+
+/* Dark theme variables */
+
+.dark-theme {
+  --body-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--body-bg);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+
+.dashboard {
+  padding: var(--spacing-md);
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.current-date-display {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+.device-selector .form-select {
+  min-width: 200px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Card Styles */
+
+.card {
+  background-color: var(--card-bg);
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: var(--spacing-md);
+}
+
+/* Sensor Card Styles */
+
+.sensor-card {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.sensor-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  transition: height 0.3s ease;
+}
+
+.sensor-card[data-sensor="temp"]::before {
+  background-color: var(--temp-color);
+}
+
+.sensor-card[data-sensor="hum"]::before {
+  background-color: var(--hum-color);
+}
+
+.sensor-card[data-sensor="co2"]::before {
+  background-color: var(--co2-color);
+}
+
+.sensor-card[data-sensor="co"]::before {
+  background-color: var(--co-color);
+}
+
+.sensor-card[data-sensor="pm25"]::before {
+  background-color: var(--pm25-color);
+}
+
+.sensor-card[data-sensor="pm10"]::before {
+  background-color: var(--pm10-color);
+}
+
+.sensor-card[data-sensor="pm1"]::before {
+  background-color: var(--pm1-color);
+}
+
+.sensor-card[data-sensor="ch4"]::before {
+  background-color: var(--ch4-color);
+}
+
+.sensor-card:hover::before {
+  height: 6px;
+}
+
+.sensor-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.sensor-card[data-sensor="temp"] .sensor-icon {
+  color: var(--temp-color);
+  background-color: rgba(255, 112, 77, 0.1);
+}
+
+.sensor-card[data-sensor="hum"] .sensor-icon {
+  color: var(--hum-color);
+  background-color: rgba(61, 176, 255, 0.1);
+}
+
+.sensor-card[data-sensor="co2"] .sensor-icon {
+  color: var(--co2-color);
+  background-color: rgba(255, 77, 202, 0.1);
+}
+
+.sensor-card[data-sensor="co"] .sensor-icon {
+  color: var(--co-color);
+  background-color: rgba(255, 170, 0, 0.1);
+}
+
+.sensor-card[data-sensor="pm25"] .sensor-icon {
+  color: var(--pm25-color);
+  background-color: rgba(160, 115, 255, 0.1);
+}
+
+.sensor-card[data-sensor="pm10"] .sensor-icon {
+  color: var(--pm10-color);
+  background-color: rgba(82, 113, 255, 0.1);
+}
+
+.sensor-card[data-sensor="pm1"] .sensor-icon {
+  color: var(--pm1-color);
+  background-color: rgba(121, 134, 203, 0.1);
+}
+
+.sensor-card[data-sensor="ch4"] .sensor-icon {
+  color: var(--ch4-color);
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.sensor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sensor-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sensor-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.sensor-progress {
+  margin-top: auto;
+}
+
+.progress {
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.temp-bg {
+  background-color: var(--temp-color);
+}
+
+.hum-bg {
+  background-color: var(--hum-color);
+}
+
+.co2-bg {
+  background-color: var(--co2-color);
+}
+
+.co-bg {
+  background-color: var(--co-color);
+}
+
+.pm25-bg {
+  background-color: var(--pm25-color);
+}
+
+.pm10-bg {
+  background-color: var(--pm10-color);
+}
+
+.pm1-bg {
+  background-color: var(--pm1-color);
+}
+
+.ch4-bg {
+  background-color: var(--ch4-color);
+}
+
+/* Chart Container */
+
+.chart-container {
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: var(--border-radius);
+  height: 100%;
+}
+
+.chart-container h4 {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: var(--text-secondary);
+}
+
+/* Time period selector */
+
+.time-period-selector .btn-group {
+  border-radius: calc(var(--border-radius) / 2);
+  overflow: hidden;
+}
+
+.btn-period {
+  background-color: var(--card-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-period:hover:not(.active) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-period.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* AQI Card Specific Styles */
+
+.aqi-dashboard-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--spacing-md);
+  color: var(--text-primary);
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.aqi-dashboard-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--good-color),
+    var(--moderate-color),
+    var(--unhealthy-sg-color),
+    var(--unhealthy-color),
+    var(--very-unhealthy-color),
+    var(--hazardous-color)
+  );
+}
+
+.aqi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.aqi-header h3 {
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.aqi-timestamp {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.aqi-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.aqi-gauge-container {
+  position: relative;
+  width: 200px;
+  height: 120px;
+}
+
+.aqi-value-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  text-align: center;
+  z-index: 10;
+}
+
+#aqi-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.aqi-status-pill {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  background-color: var(--good-color);
+}
+
+.aqi-scale {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin-top: 10px;
+}
+
+.scale-mark {
+  font-size: 0.7rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.scale-mark::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 6px;
+  background-color: var(--text-secondary);
+}
+
+.scale-mark.good {
+  color: var(--good-color);
+}
+
+.scale-mark.moderate {
+  color: var(--moderate-color);
+}
+
+.scale-mark.unhealthy-sg {
+  color: var(--unhealthy-sg-color);
+}
+
+.scale-mark.unhealthy {
+  color: var(--unhealthy-color);
+}
+
+.scale-mark.very-unhealthy {
+  color: var(--very-unhealthy-color);
+}
+
+.scale-mark.hazardous {
+  color: var(--hazardous-color);
+}
+
+.aqi-info {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: var(--border-radius);
+  padding: 15px;
+}
+
+.sensor-readings {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sensor-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 100px;
+  margin-bottom: 10px;
+}
+
+.sensor-item .sensor-icon {
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.sensor-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendation-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.recommendation-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+
+.recommendation-content h5 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.recommendation-content p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Media queries for WebView in Android */
+
+@media (max-width: 992px) {
+  .dashboard {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+  }
+  .device-selector {
+    margin-top: 10px;
+    width: 100%;
+  }
+  .device-selector .form-select {
+    width: 100%;
+  }
+  .aqi-gauge-container {
+    width: 180px;
+    height: 110px;
+  }
+  #aqi-value {
+    font-size: 2.2rem;
+  }
+  .sensor-readings {
+    flex-direction: column;
+  }
+  .sensor-item {
+    margin-bottom: 15px;
+  }
+}
+
+.chart-container {
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: var(--border-radius);
+  height: 250px;
+  /* Fixed height for chart container */
+  overflow: hidden;
+  /* Prevent overflow */
+}
+
+.chart-container canvas {
+  max-height: 200px;
+  /* Match canvas height attribute */
+  width: 100%;
+}

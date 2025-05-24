@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air Quality Monitor</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid dashboard">
+      <header class="dashboard-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1>Indoor Air Quality Monitor</h1>
+          <div class="device-selector">
+            <select id="node-selector" class="form-select">
+              <!-- Options will be populated dynamically -->
+            </select>
+          </div>
+        </div>
+        <div class="current-date-display">
+          <span id="current-date">--</span>
+        </div>
+      </header>
+
+      <div class="row">
+        <!-- New AQI Card -->
+        <div class="col-lg-4 mb-4">
+          <div class="aqi-dashboard-card">
+            <div class="aqi-header">
+              <h3>Air Quality Index</h3>
+              <span class="aqi-timestamp"
+                >Updated: <span id="last-updated">--</span></span
+              >
+            </div>
+
+            <div class="aqi-display">
+              <div class="aqi-gauge-container">
+                <canvas id="aqi-gauge"></canvas>
+                <div class="aqi-value-wrapper">
+                  <div id="aqi-value">--</div>
+                  <div id="aqi-status" class="aqi-status-pill">--</div>
+                </div>
+              </div>
+
+              <div class="aqi-scale">
+                <span class="scale-mark good">0</span>
+                <span class="scale-mark moderate">50</span>
+                <span class="scale-mark unhealthy-sg">100</span>
+                <span class="scale-mark unhealthy">150</span>
+                <span class="scale-mark very-unhealthy">200</span>
+                <span class="scale-mark hazardous">300</span>
+              </div>
+            </div>
+
+            <div class="aqi-info">
+              <div class="sensor-readings">
+                <div class="sensor-item">
+                  <div class="sensor-icon">
+                    <i class="bi bi-thermometer-half"></i>
+                  </div>
+                  <div class="sensor-data">
+                    <span class="sensor-name">Temperature</span>
+                    <span class="sensor-value" id="temp-value">--°C</span>
+                  </div>
+                </div>
+                <div class="sensor-item">
+                  <div class="sensor-icon">
+                    <i class="bi bi-droplet-half"></i>
+                  </div>
+                  <div class="sensor-data">
+                    <span class="sensor-name">Humidity</span>
+                    <span class="sensor-value" id="hum-value">--%</span>
+                  </div>
+                </div>
+                <div class="sensor-item">
+                  <div class="sensor-icon"><i class="bi bi-cloud-fog"></i></div>
+                  <div class="sensor-data">
+                    <span class="sensor-name">PM2.5</span>
+                    <span class="sensor-value" id="pm25-value">-- µg/m³</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="recommendation-container">
+                <div class="recommendation-icon" id="rec-icon">
+                  <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="recommendation-content">
+                  <h5 id="rec-title">Good Air Quality</h5>
+                  <p id="rec-text">
+                    Air quality is considered satisfactory, and air pollution
+                    poses little or no risk.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pollutant cards -->
+        <div class="col-lg-8 mb-4">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="card sensor-card" data-sensor="co2">
+                <div class="card-body">
+                  <div class="sensor-icon">
+                    <i class="bi bi-cloud-haze"></i>
+                  </div>
+                  <div class="sensor-info">
+                    <div class="sensor-name">CO₂</div>
+                    <div class="sensor-value" id="co2-display">-- ppm</div>
+                  </div>
+                  <div class="sensor-progress">
+                    <div class="progress">
+                      <div
+                        class="progress-bar co2-bg"
+                        id="co2-bar"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="card sensor-card" data-sensor="co">
+                <div class="card-body">
+                  <div class="sensor-icon">
+                    <i class="bi bi-cloud"></i>
+                  </div>
+                  <div class="sensor-info">
+                    <div class="sensor-name">CO</div>
+                    <div class="sensor-value" id="co-display">-- ppm</div>
+                  </div>
+                  <div class="sensor-progress">
+                    <div class="progress">
+                      <div
+                        class="progress-bar co-bg"
+                        id="co-bar"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="card sensor-card" data-sensor="pm10">
+                <div class="card-body">
+                  <div class="sensor-icon">
+                    <i class="bi bi-cloud-fog2"></i>
+                  </div>
+                  <div class="sensor-info">
+                    <div class="sensor-name">PM10</div>
+                    <div class="sensor-value" id="pm10-display">-- µg/m³</div>
+                  </div>
+                  <div class="sensor-progress">
+                    <div class="progress">
+                      <div
+                        class="progress-bar pm10-bg"
+                        id="pm10-bar"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="card sensor-card" data-sensor="ch4">
+                <div class="card-body">
+                  <div class="sensor-icon">
+                    <i class="bi bi-cloud-haze2"></i>
+                  </div>
+                  <div class="sensor-info">
+                    <div class="sensor-name">CH₄</div>
+                    <div class="sensor-value" id="ch4-value">-- ppm</div>
+                  </div>
+                  <div class="sensor-progress">
+                    <div class="progress">
+                      <div
+                        class="progress-bar ch4-bg"
+                        id="ch4-bar"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="card sensor-card" data-sensor="pm1">
+                <div class="card-body">
+                  <div class="sensor-icon">
+                    <i class="bi bi-cloud-haze"></i>
+                  </div>
+                  <div class="sensor-info">
+                    <div class="sensor-name">PM1</div>
+                    <div class="sensor-value" id="pm1-value">-- µg/m³</div>
+                  </div>
+                  <div class="sensor-progress">
+                    <div class="progress">
+                      <div
+                        class="progress-bar pm1-bg"
+                        id="pm1-bar"
+                        style="width: 0%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <h3>Historical Data</h3>
+              <div class="time-period-selector">
+                <div class="btn-group" role="group">
+                  <button
+                    type="button"
+                    class="btn btn-period"
+                    data-period="day"
+                  >
+                    24 Hours
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-period active"
+                    data-period="week"
+                  >
+                    7 Days
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-period"
+                    data-period="month"
+                  >
+                    30 Days
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>Temperature (°C)</h4>
+                    <canvas id="temp-chart" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>Humidity (%)</h4>
+                    <canvas id="hum-chart" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>CO₂ (ppm)</h4>
+                    <canvas id="co2-chart" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>CO (ppm)</h4>
+                    <canvas id="co-chart" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>PM2.5 (µg/m³)</h4>
+                    <canvas id="pm25-chart" height="200"></canvas>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="chart-container">
+                    <h4>PM10 (µg/m³)</h4>
+                    <canvas id="pm10-chart" height="200"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
